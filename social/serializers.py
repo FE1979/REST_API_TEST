@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from social.models import Post, Like
+import likes_func
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     """ Serializer for Posts """
@@ -9,10 +10,19 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     likes = serializers.HyperlinkedRelatedField(many=True,
                                                 view_name='like-detail',
                                                 read_only=True)
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ['url', 'id', 'owner', 'likes', 'title', 'body', 'created']
+        fields = ['url', 'id', 'owner', 'is_liked', 'total_likes',
+                  'title', 'body', 'created']
+
+    def get_is_liked(self, obj):
+        """ Checks if user liked post """
+
+        user = self.context.get('request').user
+        return likes_func.is_liked(obj, user)
+
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     """ Serializer for Likes """
