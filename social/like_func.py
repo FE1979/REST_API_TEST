@@ -3,10 +3,10 @@ from django.contrib.contenttypes.models import ContentType
 
 from .models import Like
 
-User = get_user_model()
+user = get_user_model()
 
 
-def add_like(obj, User):
+def add_like(obj, user):
     """ Like a Post """
 
     obj_type = ContentType.objects.get_for_model(obj)
@@ -21,7 +21,7 @@ def remove_like(obj, user):
     Like.objects.filter(content_type=obj_type, object_id=obj.id,
                         user=user).delete()
 
-def is_liked(obj):
+def is_liked(obj, user):
     """ Checks if user liked post """
 
     if not user.is_authenticated:
