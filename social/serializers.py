@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from social.models import Post, Like
-import likes_func
+from social.like_func import is_liked 
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     """ Serializer for Posts """
