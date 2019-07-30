@@ -23,7 +23,7 @@ class LikeSerializer(serializers.HyperlinkedModelSerializer):
         model = Like
         fields = ['url', 'id', 'owner', 'post']
 
-class UserSerialiser(serializers.HyperlinkedModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     """ User serializer """
 
     posts = serializers.HyperlinkedRelatedField(many=True,
