@@ -7,7 +7,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 
     owner = serializers.ReadOnlyField(source='owner.username')
     likes = serializers.HyperlinkedRelatedField(many=True,
-                                                view_name='likes',
+                                                view_name='like-detail',
                                                 read_only=True)
 
     class Meta:
@@ -27,10 +27,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     """ User serializer """
 
     posts = serializers.HyperlinkedRelatedField(many=True,
-                                                view_name='posts',
+                                                view_name='post-detail',
                                                 read_only=True)
     likes = serializers.HyperlinkedRelatedField(many=True,
-                                                view_name='likes',
+                                                view_name='like-detail',
                                                 read_only=True)
 
     class Meta:

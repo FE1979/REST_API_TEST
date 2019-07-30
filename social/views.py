@@ -51,6 +51,14 @@ class LikeList(generics.ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
+class LikeDetail(generics.RetrieveUpdateDestroyAPIView):
+    """ Render Like details"""
+
+    queryset = Like.objects.all()
+    serializer_class = LikeSerializer
+
+
+
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
