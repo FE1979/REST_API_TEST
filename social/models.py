@@ -8,7 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 class Like(models.Model):
     """ Like for Post """
 
-    owner = models.ForeignKey('auth.user', related_name='likes',
+    user = models.ForeignKey('auth.user', related_name='likes',
                               on_delete=models.CASCADE)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
@@ -22,7 +22,7 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=255, blank=True, default='')
     body = models.TextField()
-    owner = models.ForeignKey('auth.user', related_name='posts',
+    user = models.ForeignKey('auth.user', related_name='posts',
                               on_delete=models.CASCADE)
     # link with Like
     likes = GenericRelation(Like)
