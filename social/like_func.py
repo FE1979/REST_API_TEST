@@ -35,5 +35,5 @@ def get_liked_users(obj):
     """ Returns list of users liked post """
 
     obj_type = ContentType.objects.get_for_model(obj)
-    return User.objects.filter(likes__content_type=obj_type,
+    return user.objects.filter(likes__content_type=obj_type,
                                likes__object_id=obj.id)
