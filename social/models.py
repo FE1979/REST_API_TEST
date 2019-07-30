@@ -1,4 +1,19 @@
 from django.db import models
+from django.conf import settings
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.contenttypes.models import ContentType
+
+
+class Like(models.Model):
+    """ Like for Post """
+
+    owner = models.ForeignKey('auth.user', related_name='likes',
+                              on_delete=models.CASCADE)
+
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey('content_type', 'object_id')
 
 
 class Post(models.Model):
@@ -9,14 +24,14 @@ class Post(models.Model):
     body = models.TextField()
     owner = models.ForeignKey('auth.user', related_name='posts',
                               on_delete=models.CASCADE)
+    # link with Like
+    likes = GenericRelation(Like)
 
-class Like(models.Model):
-    """ Like for Post
-        Only owner can modify like
-        Like is related to the Post
-    """
+    # str represent
+    def __str__(self):
+        return self.body
 
-    owner = models.ForeignKey('auth.user', related_name='likes',
-                              on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, related_name='likes',
-                             on_delete=models.CASCADE)
+    # returns number of likes
+    @property
+    def total_likes(self):
+        return self.likes.count()
