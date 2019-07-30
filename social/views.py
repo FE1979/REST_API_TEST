@@ -39,6 +39,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+
 class LikeList(generics.ListCreateAPIView):
     """ Render Like list """
 
