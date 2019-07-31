@@ -7,11 +7,12 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     """ Serializer for Posts """
 
     liked = serializers.SerializerMethodField()
+    user = serializers.ReadOnlyField(source='user.username')
 
     class Meta:
         model = Post
         fields = ['url', 'id', 'liked', 'total_likes',
-                  'title', 'body', 'created']
+                  'title', 'body', 'user', 'created']
 
     def get_liked(self, obj):
         """ Checks if user liked post """
@@ -23,14 +24,14 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     """ Serializer for Likes """
 
-    owner = serializers.ReadOnlyField(source='owner.username')
+    user = serializers.ReadOnlyField(source='user.username')
     posts = serializers.HyperlinkedRelatedField(many=True,
                                                 view_name='post-detail',
                                                 read_only=True)
 
     class Meta:
         model = Like
-        fields = ['url', 'id', 'owner', 'posts']
+        fields = ['url', 'id', 'user', 'posts']
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """ User serializer """
