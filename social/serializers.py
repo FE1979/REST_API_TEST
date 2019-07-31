@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from social.models import Post, Like
 from social.like_func import is_liked
 
+
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     """ Serializer for Posts """
 
@@ -21,18 +22,6 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         return is_liked(obj, user)
 
 
-class LikeSerializer(serializers.HyperlinkedModelSerializer):
-    """ Serializer for Likes """
-
-    user = serializers.ReadOnlyField(source='user.username')
-    posts = serializers.HyperlinkedRelatedField(many=True,
-                                                view_name='post-detail',
-                                                read_only=True)
-
-    class Meta:
-        model = Like
-        fields = ['url', 'id', 'user', 'posts']
-
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """ User serializer """
 
@@ -46,14 +35,30 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     password = serializers.CharField(write_only=True)
 
     def create(self, validated_data):
+        """ Method for creating new API user """
+
         user = User.objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
             password=validated_data['password']
         )
+
         user.save()
         return user
 
     class Meta:
         model = User
         fields = ['url', 'id', 'username', 'email', 'password', 'posts', 'likes']
+
+
+class LikeSerializer(serializers.HyperlinkedModelSerializer):
+    """ Serializer for Likes """
+
+    user = serializers.ReadOnlyField(source='user.username')
+    posts = serializers.HyperlinkedRelatedField(many=True,
+                                                view_name='post-detail',
+                                                read_only=True)
+
+    class Meta:
+        model = Like
+        fields = ['url', 'id', 'user', 'posts']

@@ -3,8 +3,8 @@ from django.contrib.contenttypes.models import ContentType
 
 from .models import Like
 
-user = get_user_model()
 
+user = get_user_model()
 
 def add_like(obj, user):
     """ Like a Post """
@@ -14,12 +14,14 @@ def add_like(obj, user):
                                                   object_id=obj.id, user=user)
     return like
 
+
 def remove_like(obj, user):
     """ Remove Like """
 
     obj_type = ContentType.objects.get_for_model(obj)
     Like.objects.filter(content_type=obj_type, object_id=obj.id,
                         user=user).delete()
+
 
 def is_liked(obj, user):
     """ Checks if user liked post """
@@ -30,6 +32,7 @@ def is_liked(obj, user):
     likes = Like.objects.filter(content_type=obj_type, object_id=obj.id,
                                 user=user)
     return likes.exists()
+
 
 def get_liked_users(obj):
     """ Returns list of users liked post """

@@ -10,7 +10,7 @@ class Like(models.Model):
 
     user = models.ForeignKey('auth.user', related_name='likes',
                               on_delete=models.CASCADE)
-
+    # generic relation to Post model
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')

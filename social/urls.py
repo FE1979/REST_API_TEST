@@ -8,6 +8,7 @@ from social import views
 router = DefaultRouter()
 router.register(r'posts', views.PostDetail)
 
+
 # API endpoints
 urlpatterns = format_suffix_patterns([
     path('', views.api_root),
@@ -19,6 +20,3 @@ urlpatterns = format_suffix_patterns([
 ])
 
 urlpatterns += router.urls
-
-
-#    path('posts/<int:pk>/', views.PostDetail.as_view(), name='post-detail'),

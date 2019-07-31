@@ -12,6 +12,7 @@ from social.serializers import UserSerializer, PostSerializer, LikeSerializer
 from social.likemixin import LikedMixin
 
 
+# User list and detail views
 class UserList(generics.ListCreateAPIView):
     """ Render User list """
 
@@ -26,6 +27,7 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = UserSerializer
 
 
+# Post list and detail views
 class PostList(generics.ListCreateAPIView):
     """ Render Posts list """
 
@@ -43,6 +45,7 @@ class PostDetail(LikedMixin, viewsets.ModelViewSet):
     serializer_class = PostSerializer
 
 
+# Like list and detail views (deprecated)
 class LikeList(generics.ListCreateAPIView):
     """ Render Like list """
 
@@ -61,6 +64,7 @@ class LikeDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 
+# API_Root
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
