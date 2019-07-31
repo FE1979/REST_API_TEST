@@ -12,7 +12,7 @@ from social.serializers import UserSerializer, PostSerializer, LikeSerializer
 from social.likemixin import LikedMixin
 
 
-class UserList(generics.ListAPIView):
+class UserList(generics.ListCreateAPIView):
     """ Render User list """
 
     queryset = User.objects.all()
