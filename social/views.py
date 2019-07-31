@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.views import APIView
 from rest_framework import viewsets
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 
 from django.contrib.auth.models import User
 
@@ -18,6 +19,7 @@ class UserList(generics.ListCreateAPIView):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [AllowAny]
 
 
 class UserDetail(generics.RetrieveAPIView):
@@ -25,6 +27,7 @@ class UserDetail(generics.RetrieveAPIView):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 # Post list and detail views
@@ -33,6 +36,7 @@ class PostList(generics.ListCreateAPIView):
 
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -43,6 +47,7 @@ class PostDetail(LikedMixin, viewsets.ModelViewSet):
 
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 # Like list and detail views (deprecated)
