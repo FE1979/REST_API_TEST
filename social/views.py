@@ -21,6 +21,7 @@ class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
+    authentication_classes = [JWTAuthentication]
 
 
 class UserDetail(generics.RetrieveAPIView):
@@ -29,6 +30,7 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    authentication_classes = [JWTAuthentication]
 
 
 # Post list and detail views
@@ -54,6 +56,7 @@ class PostDetail(LikedMixin, viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    authentication_classes = [JWTAuthentication]
 
 
 # Like list and detail views (deprecated)
