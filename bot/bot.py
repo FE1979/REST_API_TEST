@@ -14,76 +14,90 @@ New_users = {
 }
 
 
-def sign_up_user(user_creadentials):
-    """ Sing up new user
-        input_type: dict
-        input:      username, email and password
-        return:     requests.response
-    """
+class User():
+    """ User class """
 
-    resp = requests.post(base_url + users, data=user_creadentials)
-    return resp
-
-
-def create_post(user, post):
-    """ Creates post by sending post request
-        input:      user
-        input_post: post with 'title' and 'body' desribed
-        input_type: dict
-        return:     requests.response
-    """
-    auth = {'username': user['username'],
-            'password': user['password']}
-
-    # get token
-    resp = requests.post(base_url + get_token, data=auth)
-    tokens = json.loads(resp.text)
-    token = tokens['access']
-
-    # make post
-    headers = {"Content-Type": "application/json", "Authorization": "Bearer " + token}
-    resp = requests.post(base_url + posts, headers=headers,
-                         data=json.dumps(post))
-
-    return resp
+    def __init__(self, username, email, password):
+        self.username = username
+        self.email = email
+        self.password = password
+        self.auth = {'username': self.username, 'password': self.password}
 
 
-def like_post(user, post_number):
-    """ Likes post
-        input:      user
-        input:      post_number
-        input_type: integer
-    """
-    auth = {'username': user['username'],
-            'password': user['password']}
+    def sign_up(self):
+        """ Sing up new user
+            return:     requests.response
+        """
 
-    # get token
-    resp = requests.post(base_url + get_token, data=auth)
-    tokens = json.loads(resp.text)
-    token = tokens['access']
-
-    # make post
-    headers = {"Content-Type": "application/json", "Authorization": "Bearer " + token}
-    resp = requests.post(
-        base_url + posts + f'{post_number}/' + like,
-        headers=headers
-    )
-
-    return resp
+        resp = requests.post(base_url + users, data=self.auth)
+        return resp
 
 
-post = {'title': 'Morning post from Mike',
-        'body': 'I had beacon on breakfast! (photo)'}
+    def get_token(self):
+        """ Returns token for user """
 
-# let create a post from Mike
-print(create_post(New_users['Mike'], post=post))
+        resp = requests.post(base_url + get_token, data=self.auth)
+        tokens = json.loads(resp.text)
+        token = tokens['access']
 
-resp = requests.get(base_url + posts)
-if resp.status_code == 200:
-    posts_list = json.loads(resp.text)
-    last_post = len(posts_list) - 1
-else:
-    print(resp)
+        return token
 
-# And Mike likes his morning post
-print(like_post(New_users['Mike'], post_number=last_post))
+
+    def get_header(self):
+        header = {"Content-Type": "application/json", "Authorization": "Bearer "
+                   + self.get_token()}
+
+        return header
+
+
+    def create_post(self, post):
+        """ Creates post by sending post request
+            input_post: post with 'title' and 'body' desribed
+            input_type: dict
+            return:     requests.response
+        """
+
+        resp = requests.post(base_url + posts, headers=self.get_header(),
+                             data=json.dumps(post))
+
+        return resp
+
+
+    def like_post(self, post_number):
+        """ Likes post
+            input:      post_number
+            input_type: integer
+            return:     requests.response
+        """
+
+        resp = requests.post(base_url + posts + f'{post_number}/' + like,
+            headers=self.get_header())
+
+        return resp
+
+
+    def unlike_post(self, post_number):
+        """ Unlikes post
+            input:      post_number
+            input_type: integer
+            return:     requests.response
+        """
+
+        resp = requests.post(base_url + posts + f'{post_number}/' + unlike,
+            headers=self.get_header())
+
+        return resp
+
+#create a Ford user
+user_data = New_users['Ford']
+ford = User(user_data['username'],user_data['email'], user_data['password'])
+
+#Let create another post from Ford
+post = {'title': 'Black car...',
+        'body': 'I like black cars and black coffee. Time for coffee break! \
+        (photo as usual)'}
+
+print(ford.create_post(post))
+print(ford.like_post(5))
+print(ford.like_post(6))
+print(ford.unlike_post(6))
