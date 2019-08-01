@@ -10,21 +10,23 @@ class User():
         self.email = email
         self.password = password
         self.auth = {'username': self.username, 'password': self.password}
-
+        self.data = {'username': self.username, 'email': self.email,
+                     'password': self.password}
 
     def sign_up(self, url):
         """ Sing up new user
             input:  sign up url
             return: requests.response
         """
-
-        resp = requests.post(url, data=self.auth)
+        headers = {"Content-Type": "application/json"}
+        resp = requests.post(url, headers=headers, data=json.dumps(self.data))
         return resp
 
 
     def get_tokens(self, url):
         """ Gets token for user
-            input: tokens url
+            input:  tokens url
+            return: requests.response
         """
 
         resp = requests.post(url, data=self.auth)
@@ -37,7 +39,7 @@ class User():
 
     def get_header(self):
         header = {"Content-Type": "application/json", "Authorization": "Bearer "
-                   + self.access_token()}
+                   + self.access_token}
 
         return header
 
@@ -64,7 +66,7 @@ class User():
             return:     requests.response
         """
 
-        resp = requests.post(url + f'{post_number}/like',
+        resp = requests.post(url + f'{post_number}/like/',
             headers=self.get_header())
 
         return resp
