@@ -7,5 +7,4 @@
 *.egg
 *.swp
 
-manage.py
 db.sqlite3
