@@ -28,9 +28,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     posts = serializers.HyperlinkedRelatedField(many=True,
                                                 view_name='post-detail',
                                                 read_only=True)
-    likes = serializers.HyperlinkedRelatedField(many=True,
-                                                view_name='like-detail',
-                                                read_only=True)
 
     password = serializers.CharField(write_only=True)
 
@@ -48,13 +45,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ['url', 'id', 'username', 'email', 'password', 'posts', 'likes']
+        fields = ['url', 'id', 'username', 'email', 'password', 'posts']
 
 
 class LikeSerializer(serializers.HyperlinkedModelSerializer):
     """ Serializer for Likes """
 
-    user = serializers.ReadOnlyField(source='user.username')
+#    user = serializers.ReadOnlyField(source='user.username')
     posts = serializers.HyperlinkedRelatedField(many=True,
                                                 view_name='post-detail',
                                                 read_only=True)
