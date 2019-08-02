@@ -74,7 +74,9 @@ for user in users_container:
         # use 80% chance to create a post
         resp = random() < 0.8 and  user.create_post(base_url + posts_url, post)
         print(resp)
+
         i += 1
+
 
 # Let our users like other user's posts
 for user in users_container:
@@ -92,7 +94,7 @@ for user in users_container:
     for p in posts_list:
         if likes:
             if random() < 0.6:
-                post_number = posts_list.index(p)
+                post_number = posts_list.index(p) + 1
                 resp = user.like_post(base_url + posts_url, post_number)
                 print(resp)
                 # get out one like from user
